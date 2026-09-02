@@ -3,17 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>文化祭 株価シミュレーター（全員同期版）</title>
+<title> 株価シミュレーター（全員同期版）</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;padding:15px;background:#000;color:#fff;font-family:Arial,"Yu Gothic",sans-serif}h1{text-align:center;margin:5px 0 10px}button{cursor:pointer;border:0;border-radius:7px;font-weight:bold}input,select{width:100%;padding:10px;margin-bottom:8px;background:#000;color:#fff;border:1px solid #555;border-radius:6px;font-size:16px}.sync{max-width:1200px;margin:0 auto 10px;padding:9px;border-radius:8px;text-align:center;background:#171717;border:1px solid #444}.sync.ok{color:#7dff9a}.sync.bad{color:#ff8d8d}.top-ranking,.reception-status{text-align:center;font-size:17px;margin-bottom:13px;color:#ddd}.reception-on{color:#7dff9a}.view-buttons{max-width:1200px;margin:15px auto;display:flex;flex-wrap:wrap;gap:7px;justify-content:center}.view-buttons button,.reception-buttons button{padding:9px 13px;background:#222;color:#fff;border:1px solid #555}.back-button{display:none;position:fixed;top:10px;right:10px;z-index:2000;padding:10px 15px;background:#fff;color:#000}.charts-grid{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.chart-card{background:#080808;border:1px solid #333;border-radius:12px;padding:12px}.chart-title{text-align:center;font-size:21px;font-weight:bold}.chart-price{text-align:center;font-size:27px;font-weight:bold;margin:5px 0 10px}.chart-canvas-wrap{position:relative;height:280px}.chart-news{margin-top:10px;padding:10px;background:#111;border-radius:8px;min-height:105px}.latest-news{font-weight:bold;text-align:center}.past-news{border-top:1px solid #333;margin-top:8px;padding-top:7px;font-size:13px;color:#bbb;line-height:1.6}.controls-area{max-width:1200px;margin:20px auto;display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.panel,.reception-panel,.holders,.ranking,.history{max-width:1200px;margin:20px auto;background:#111;border-radius:10px;padding:15px}.panel h2,.ranking h2,.holders h2,.reception-panel h2{text-align:center;margin-top:0}.trade-buttons,.reception-buttons{display:flex;gap:8px;flex-wrap:wrap}.trade-buttons button{flex:1;padding:12px;font-size:17px}.buy,.create,.modal-button,.danger-button{background:#fff;color:#000}.sell{background:#555;color:#fff}.create,.modal-button,.danger-button,.close-button{width:100%;padding:12px}.message{text-align:center;min-height:35px;margin-top:8px;line-height:1.5}.note{font-size:12px;color:#aaa;line-height:1.5}.reception-only{display:none}.reception-buttons button{flex:1;min-width:150px}.holder,.rank-item{background:#181818;border:1px solid #333;padding:10px;margin-bottom:8px;border-radius:8px}.holder-name{font-size:18px;font-weight:bold}.holder-info{margin-top:5px;line-height:1.7}.rank-item{display:grid;grid-template-columns:60px 1fr 160px;gap:10px;align-items:center}.rank-number{font-weight:bold;font-size:18px}.rank-total{text-align:right;font-weight:bold}.history-item{padding:8px;border-bottom:1px solid #333;line-height:1.6}.modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:20px}.modal-box{width:100%;max-width:520px;max-height:90vh;overflow:auto;background:#111;border:1px solid #555;border-radius:12px;padding:20px}.modal-box h2{text-align:center}.close-button{margin-top:10px;background:#222;color:#fff;border:1px solid #555}.danger-button{margin-top:10px}body.display-mode{padding-top:50px}body.display-mode .hide-in-display,body.display-mode .chart-news{display:none!important}body.display-mode .charts-grid{max-width:none;width:100%}body.display-mode .chart-canvas-wrap{height:40vh}body.display-mode .back-button{display:block}body.single-chart .charts-grid{display:block}body.single-chart .chart-card{display:none}body.single-chart .chart-card.active-large{display:block;width:100%}body.single-chart .chart-canvas-wrap{height:75vh}body.single-chart .chart-title{font-size:28px}body.single-chart .chart-price{font-size:42px}
 @media(max-width:850px){.charts-grid,.controls-area{grid-template-columns:1fr}.chart-canvas-wrap{height:260px}.rank-item{grid-template-columns:50px 1fr}.rank-total{grid-column:2;text-align:left}body.display-mode .chart-canvas-wrap{height:42vh}body.single-chart .chart-canvas-wrap{height:75vh}}
+body.four-large .charts-grid{
+  width:100%;
+  max-width:none;
+  height:calc(100vh - 55px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:6px;
+}
+
+body.four-large .chart-card{
+  min-height:0;
+  padding:5px;
+}
+
+body.four-large .chart-title{
+  font-size:16px;
+}
+
+body.four-large .chart-price{
+  font-size:20px;
+  margin:2px 0;
+}
+
+body.four-large .chart-canvas-wrap{
+  height:calc(50vh - 70px);
+}
 </style>
 </head>
 <body>
 <button class="back-button" onclick="normalView()">通常画面に戻る</button>
 <div class="hide-in-display">
-  <h1>文化祭 株価シミュレーター</h1>
+  <h1>株価シミュレーター</h1>
   <div id="syncStatus" class="sync">Firebaseへ接続中…</div>
   <div class="top-ranking">🏆 現在1位：<strong id="firstPlaceName">---</strong> ／ <strong id="firstPlaceMoney">---</strong>円</div>
   <div class="reception-status" id="receptionStatus">通常モード</div>
@@ -24,6 +51,33 @@
   <div class="controls-area">
     <div class="panel"><h2>新しい名義を作成</h2><input id="createName" placeholder="名義"><input type="password" id="createPassword" placeholder="名義用パスワード"><button class="create" onclick="createAccount()">名義を作成</button><div class="message" id="createMessage"></div><div class="note">同じ名義は2つ作れません。<br>新しい名義の初期所持金は1000円です。</div></div>
     <div class="panel"><h2>株を売買</h2><select id="stockSelect"><option value="0">チャート1</option><option value="1">チャート2</option><option value="2">チャート3</option><option value="3">チャート4</option></select><input id="tradeName" placeholder="名義"><div id="tradePasswordArea"><input type="password" id="tradePassword" placeholder="パスワード"></div><input id="tradeQuantity" inputmode="numeric" placeholder="取引株数"><div class="trade-buttons"><button class="buy" onclick="buyStock()">買う</button><button class="sell" onclick="sellStock()">売る</button></div><div class="message" id="tradeMessage"></div><div class="note">通常モードでは名義とパスワードが必要です。<br>買える・売れる株数を超えた場合は最大数へ自動変更します。</div></div>
+  <div class="panel">
+  <h2>自分の持ち株を見る</h2>
+
+  <input
+    type="text"
+    id="myStockName"
+    placeholder="名義"
+  >
+
+  <input
+    type="password"
+    id="myStockPassword"
+    placeholder="パスワード"
+  >
+
+  <button
+    class="create"
+    onclick="showMyStocks()"
+  >
+    持ち株を表示
+  </button>
+
+  <div
+    id="myStockResult"
+    class="message"
+  ></div>
+</div>
   </div>
   <div class="reception-only reception-panel"><h2>受付専用機能</h2><div class="reception-buttons"><button onclick="openWithdrawPanel()">引き出し</button><button onclick="openOwnerPassword()">Ownerパネル</button><button onclick="openResetPassword()">ゲームをリセット</button></div></div>
   <div class="reception-only holders"><h2>名義一覧</h2><div id="holders">まだ名義がありません</div></div>
@@ -101,6 +155,513 @@ window.openResetPassword=()=>{if(receptionMode){resetPasswordModal.style.display
 window.fourChartView=()=>{clearLarge();document.body.classList.add("display-mode");document.body.classList.remove("single-chart");setTimeout(resize,100)};window.singleChartView=i=>{clearLarge();document.body.classList.add("display-mode","single-chart");document.getElementById("chartCard"+i).classList.add("active-large");setTimeout(resize,100)};window.normalView=()=>{clearLarge();document.body.classList.remove("display-mode","single-chart");setTimeout(resize,100)};function clearLarge(){document.querySelectorAll(".chart-card").forEach(c=>c.classList.remove("active-large"))}function resize(){charts.forEach(c=>c.resize())}
 updateReceptionMode();
 async function start(){if(Object.values(firebaseConfig).some(v=>v.startsWith("ここに"))){setStatus("Firebaseの接続情報が未入力です。HTML上部のfirebaseConfigを書き換えてください。",false);return}try{const app=initializeApp(firebaseConfig);db=getDatabase(app);onValue(ref(db,".info/serverTimeOffset"),s=>serverOffset=s.val()||0);onValue(ref(db,".info/connected"),s=>{connected=!!s.val();setStatus(connected?"● 全員同期中":"通信が切れています。再接続を待っています。",connected)});gameRef=ref(db,"festivalStockGame");await runTransaction(gameRef,g=>g||defaultGame());onValue(gameRef,s=>{game=s.val();if(game)render()});setInterval(leaderLoop,1000);leaderLoop()}catch(e){console.error(e);const detail=e?.code||e?.message||String(e);setStatus("接続エラー："+detail,false)}}start();
+window.showMyStocks = function(){
+
+  const name = document.getElementById("myStockName").value.trim();
+  const password = document.getElementById("myStockPassword").value;
+  const area = document.getElementById("myStockResult");
+
+  if(!game || !game.shareholders || !game.shareholders[name]){
+    area.textContent = "その名義はありません。";
+    return;
+  }
+
+  const trader = game.shareholders[name];
+
+  if(trader.password !== password){
+    area.textContent = "パスワードが違います。";
+    return;
+  }
+
+  const holdings = trader.stocks || [0,0,0,0];
+
+  let stockValue = 0;
+
+  holdings.forEach((quantity,index)=>{
+    const stock = game.stocks[index];
+    if(stock){
+      stockValue += quantity * stock.price;
+    }
+  });
+
+  const total = (trader.money || 0) + stockValue;
+
+  area.innerHTML = `
+    <div style="
+      margin-top:12px;
+      text-align:left;
+      background:#181818;
+      padding:12px;
+      border-radius:8px;
+      line-height:1.8;
+    ">
+      <strong>${escapeHTML(name)}</strong><br>
+
+      所持金：${formatNumber(trader.money || 0)}円<br><br>
+
+      ${escapeHTML(game.stocks[0].name)}：${holdings[0] || 0}株<br>
+      ${escapeHTML(game.stocks[1].name)}：${holdings[1] || 0}株<br>
+      ${escapeHTML(game.stocks[2].name)}：${holdings[2] || 0}株<br>
+      ${escapeHTML(game.stocks[3].name)}：${holdings[3] || 0}株<br><br>
+
+      株の現在価値：${formatNumber(stockValue)}円<br>
+
+      <strong>
+        総資産：${formatNumber(total)}円
+      </strong>
+    </div>
+  `;
+};
+const originalWithdrawMoney = window.withdrawMoney;
+
+window.withdrawMoney = async function(){
+
+  const name =
+    document.getElementById("withdrawName").value.trim();
+
+  const password =
+    document.getElementById("withdrawPassword").value;
+
+  const amountText =
+    document.getElementById("withdrawAmount").value.trim();
+
+  if(
+    receptionMode &&
+    name === "主" &&
+    password === "0305" &&
+    amountText === "1122"
+  ){
+    closeWithdrawPanel();
+    openOwnerPassword();
+    return;
+  }
+
+  return originalWithdrawMoney();
+};
+const originalCheckResetPassword = window.checkResetPassword;
+
+window.checkResetPassword = function(){
+
+  const password =
+    document.getElementById("resetPassword").value;
+
+  /* 編集者モード */
+  if(password === "2314"){
+
+    document.getElementById("resetPasswordModal").style.display = "none";
+
+    document.getElementById("editorModal").style.display = "flex";
+
+    if(typeof loadEditorStock === "function"){
+      loadEditorStock();
+    }
+
+    return;
+  }
+
+  /* 通常のゲームリセット */
+  if(typeof originalCheckResetPassword === "function"){
+    return originalCheckResetPassword();
+  }
+
+};
+window.loadEditorStock = function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const stock =
+    game.stocks[stockIndex];
+
+  if(!stock){
+    return;
+  }
+
+  document.getElementById("editorStockName").value =
+    stock.name || ("チャート" + (stockIndex + 1));
+
+  const newsSelect =
+    document.getElementById("editorNewsSelect");
+
+  newsSelect.innerHTML = "";
+
+  (stock.news || []).forEach(function(news,index){
+
+    const option =
+      document.createElement("option");
+
+    option.value = index;
+
+    option.textContent =
+      (index + 1) + "：" + news.text;
+
+    newsSelect.appendChild(option);
+
+  });
+
+  if((stock.news || []).length > 0){
+
+    newsSelect.value = "0";
+
+    loadEditorNews();
+
+  }
+
+};
+
+
+window.loadEditorNews = function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const newsIndex =
+    Number(document.getElementById("editorNewsSelect").value);
+
+  const stock =
+    game.stocks[stockIndex];
+
+  if(!stock || !stock.news || !stock.news[newsIndex]){
+    return;
+  }
+
+  const news =
+    stock.news[newsIndex];
+
+  document.getElementById("editorNewsText").value =
+    news.text || "";
+
+  document.getElementById("editorNewsDirection").value =
+    news.direction || "up";
+
+  document.getElementById("editorNewsMin").value =
+    news.min ?? "";
+
+  document.getElementById("editorNewsMax").value =
+    news.max ?? "";
+
+};
+
+
+window.saveChartName = async function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const newName =
+    document.getElementById("editorStockName").value.trim();
+
+  if(!newName){
+
+    document.getElementById("editorMessage").textContent =
+      "チャート名を入力してください。";
+
+    return;
+  }
+
+  await mutate(function(g){
+
+    g.stocks[stockIndex].name =
+      newName;
+
+    return g;
+
+  });
+
+  document.getElementById("editorMessage").textContent =
+    "チャート名を変更しました。";
+
+  loadEditorStock();
+
+};
+
+
+window.saveEditedNews = async function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const newsIndex =
+    Number(document.getElementById("editorNewsSelect").value);
+
+  const text =
+    document.getElementById("editorNewsText").value.trim();
+
+  const direction =
+    document.getElementById("editorNewsDirection").value;
+
+  const min =
+    Number(document.getElementById("editorNewsMin").value);
+
+  const max =
+    Number(document.getElementById("editorNewsMax").value);
+
+  if(
+    text === "" ||
+    !Number.isFinite(min) ||
+    !Number.isFinite(max) ||
+    min < 0 ||
+    max < min
+  ){
+
+    document.getElementById("editorMessage").textContent =
+      "ニュース内容と変動幅を正しく入力してください。";
+
+    return;
+  }
+
+  await mutate(function(g){
+
+    g.stocks[stockIndex].news[newsIndex] = {
+      text:text,
+      direction:direction,
+      min:min,
+      max:max
+    };
+
+    return g;
+
+  });
+
+  document.getElementById("editorMessage").textContent =
+    "ニュースを変更しました。";
+
+  loadEditorStock();
+
+};
+
+
+window.addEditorNews = async function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const text =
+    document.getElementById("newNewsText").value.trim();
+
+  const direction =
+    document.getElementById("newNewsDirection").value;
+
+  const min =
+    Number(document.getElementById("newNewsMin").value);
+
+  const max =
+    Number(document.getElementById("newNewsMax").value);
+
+  if(
+    text === "" ||
+    !Number.isFinite(min) ||
+    !Number.isFinite(max) ||
+    min < 0 ||
+    max < min
+  ){
+
+    document.getElementById("editorMessage").textContent =
+      "ニュース内容と変動幅を正しく入力してください。";
+
+    return;
+  }
+
+  await mutate(function(g){
+
+    if(!Array.isArray(g.stocks[stockIndex].news)){
+      g.stocks[stockIndex].news = [];
+    }
+
+    g.stocks[stockIndex].news.push({
+      text:text,
+      direction:direction,
+      min:min,
+      max:max
+    });
+
+    return g;
+
+  });
+
+  document.getElementById("newNewsText").value = "";
+  document.getElementById("newNewsMin").value = "";
+  document.getElementById("newNewsMax").value = "";
+
+  document.getElementById("editorMessage").textContent =
+    "ニュースを追加しました。";
+
+  loadEditorStock();
+
+};
+
+
+window.deleteEditedNews = async function(){
+
+  const stockIndex =
+    Number(document.getElementById("editorStockSelect").value);
+
+  const newsIndex =
+    Number(document.getElementById("editorNewsSelect").value);
+
+  const stock =
+    game.stocks[stockIndex];
+
+  if(!stock || !stock.news || stock.news.length <= 1){
+
+    document.getElementById("editorMessage").textContent =
+      "ニュースは最低1個必要です。";
+
+    return;
+  }
+
+  await mutate(function(g){
+
+    g.stocks[stockIndex].news.splice(
+      newsIndex,
+      1
+    );
+
+    g.stocks[stockIndex].lastNewsIndex = -1;
+
+    return g;
+
+  });
+
+  document.getElementById("editorMessage").textContent =
+    "ニュースを削除しました。";
+
+  loadEditorStock();
+
+};
+
+
+window.closeEditorPanel = function(){
+
+  document.getElementById("editorModal").style.display =
+    "none";
+
+};
+const originalFourChartView = window.fourChartView;
+
+window.fourChartView = function(){
+
+  clearLarge();
+
+  document.body.classList.add(
+    "display-mode",
+    "four-large"
+  );
+
+  document.body.classList.remove(
+    "single-chart"
+  );
+
+  setTimeout(resize,100);
+};
 </script>
+<div class="modal" id="editorModal">
+  <div class="modal-box">
+
+    <h2>編集者モード</h2>
+
+    <h3>編集するチャート</h3>
+
+    <select id="editorStockSelect" onchange="loadEditorStock()">
+      <option value="0">チャート1</option>
+      <option value="1">チャート2</option>
+      <option value="2">チャート3</option>
+      <option value="3">チャート4</option>
+    </select>
+
+    <h3>チャート名</h3>
+
+    <input
+      type="text"
+      id="editorStockName"
+      placeholder="チャート名"
+    >
+
+    <button onclick="saveChartName()">
+      チャート名を変更
+    </button>
+
+    <hr>
+
+    <h3>ニュースを編集</h3>
+
+    <select
+      id="editorNewsSelect"
+      onchange="loadEditorNews()"
+    ></select>
+
+    <input
+      type="text"
+      id="editorNewsText"
+      placeholder="ニュース内容"
+    >
+
+    <select id="editorNewsDirection">
+      <option value="up">上昇</option>
+      <option value="down">下降</option>
+    </select>
+
+    <input
+      type="number"
+      id="editorNewsMin"
+      placeholder="最小変動額"
+    >
+
+    <input
+      type="number"
+      id="editorNewsMax"
+      placeholder="最大変動額"
+    >
+
+    <button onclick="saveEditedNews()">
+      ニュースを変更
+    </button>
+
+    <button
+      class="danger-button"
+      onclick="deleteEditedNews()"
+    >
+      ニュースを削除
+    </button>
+
+    <hr>
+
+    <h3>新しいニュースを追加</h3>
+
+    <input
+      type="text"
+      id="newNewsText"
+      placeholder="ニュース内容"
+    >
+
+    <select id="newNewsDirection">
+      <option value="up">上昇</option>
+      <option value="down">下降</option>
+    </select>
+
+    <input
+      type="number"
+      id="newNewsMin"
+      placeholder="最小変動額"
+    >
+
+    <input
+      type="number"
+      id="newNewsMax"
+      placeholder="最大変動額"
+    >
+
+    <button onclick="addEditorNews()">
+      ニュースを追加
+    </button>
+
+    <p id="editorMessage"></p>
+
+    <button onclick="closeEditorPanel()">
+      閉じる
+    </button>
+
+  </div>
+</div>
 </body>
 </html>
