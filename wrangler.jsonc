@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bunkasai-stock-engine",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-11",
+
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "STOCK_ENGINE",
+        "class_name": "StockEngine"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "StockEngine"
+      ]
+    }
+  ],
+
+  "triggers": {
+    "crons": [
+      "0 * * * *"
+    ]
+  }
+}
