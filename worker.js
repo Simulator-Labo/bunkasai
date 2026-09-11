@@ -80,6 +80,12 @@ function getStockSetting(i,s,stockSettings){
     minPrice:Number(cfg.minPrice??s?.minPrice??MIN_PRICE)
   };
 }
+function newsSourceDisplayIndex(sourceStockIndex){
+  const i=Number(sourceStockIndex);
+  if(i===1)return 3;
+  if(i===3)return 1;
+  return i;
+}
 function defaultStock(def,now){
   return{
     name:def.name,lineColor:def.lineColor,minuteMoveLimit:Number(def.minuteMoveLimit)||100,minPrice:Number(def.minPrice)||50,
@@ -184,7 +190,8 @@ function applyGlobalNewsToStocks(stockList,item,stockSettings,createdAt=Date.now
   if(!item?.news)return null;
   const d=item.news,sourceStockIndex=Number(item.sourceStockIndex),effects=normalizedNewsEffects(sourceStockIndex,d);
   const id=`global-news-${ENGINE_ID}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const text=String(d.text||"ãã¥ã¼ã¹"),sourceCountry=getStockSetting(sourceStockIndex,stockList[sourceStockIndex],stockSettings).name;
+  const sourceDisplayIndex=newsSourceDisplayIndex(sourceStockIndex);
+  const text=String(d.text||"ãã¥ã¼ã¹"),sourceCountry=getStockSetting(sourceDisplayIndex,stockList[sourceDisplayIndex],stockSettings).name;
   const summary=newsEffectsSummary(sourceStockIndex,d,stockList,stockSettings);
   for(let i=0;i<4;i++){
     const st=stockList[i]; if(!st)continue;
